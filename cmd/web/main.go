@@ -23,7 +23,7 @@ func main() {
 	addr := flag.String("port", ":8000", "HTTP Network address")
 	dsn := flag.String(
 		"dsn",
-		"macro_user:fit4tu/macro_tracker?parseTime=true",
+		"macro_user:fit4tu@/macro_tracker?parseTime=true",
 		"MySQL dns",
 	)
 
@@ -40,6 +40,8 @@ func main() {
 	if err != nil {
 		errorLog.Fatal(err)
 	}
+
+	defer db.Close()
 
 	templateCache, err := newCacheTemplate()
 	if err != nil {

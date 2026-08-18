@@ -25,6 +25,7 @@ func NewUserModel(db *sql.DB) *UserModel {
 	return &UserModel{DB: db}
 }
 
+// In theory the repository pattern shouldn't be used for small projects
 type UserRepository interface {
 	Insert(ctx context.Context, u *User) (int64, error)
 }
@@ -33,7 +34,16 @@ func (m *UserModel) Insert(ctx context.Context, u *User) (int64, error) {
 	query := `INSERT INTO users (name, age, weight, height, activity_level, created, tdee)
 	VALUES(?, ?, ?, ?, ?, UTC_TIMESTAMP(), ?)`
 
-	result, err := m.DB.ExecContext(ctx, query, u)
+	result, err := m.DB.ExecContext(
+		ctx,
+		query,
+		u.Name,
+		u.Age,
+		u.Weight,
+		u.Height,
+		u.ActivityLevel,
+		u.TDEE,
+	)
 	if err != nil {
 		return 0, err
 	}
