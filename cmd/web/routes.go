@@ -10,5 +10,5 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("/{$}", app.home)
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	return secureHeaders(mux)
+	return app.serverRecover(secureHeaders(mux))
 }

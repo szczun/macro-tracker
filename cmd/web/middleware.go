@@ -10,7 +10,12 @@ func secureHeaders(next http.Handler) http.Handler {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "DENY")
 		w.Header().Set("Referrer-Policy", "strict-origin-when-cross-origin")
-		w.Header().Set("Content-Security-Policy", "default-src 'self'")
+		w.Header().Set("Content-Security-Policy",
+			`default-src 'self';
+			style-src 'self' https://cdn.jsdelivr.net;
+			script-src 'self' https://cdn.jsdelivr.net;
+			font-src 'self' https://cdn.jsdelivr.net data:;
+			img-src 'self' data:;`)
 
 		next.ServeHTTP(w, r)
 	})
