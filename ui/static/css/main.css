@@ -1,0 +1,22 @@
+body {
+    background-color: #FFF9EC;
+}
+
+.bar {
+    background-color: #b5622a;
+    height: 40px;
+}
+
+.btn-custom {
+    background-color: #1e3d2f;   /* Twój kolor tła */
+    color: #fdf6e9;               /* Twój kolor tekstu */
+    font-size: 1.5rem;            /* większa czcionka */
+    padding: 1.5rem 3rem;
+    margin: 10px;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #163023;    /* trochę ciemniejszy przy najechaniu, opcjonalnie */
+    color: #fdf6e9;
+}
