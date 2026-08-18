@@ -6,16 +6,26 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
+
+	"github.com/szczun/macro-tracker/internal/models"
 )
 
 type application struct {
 	infoLog       *log.Logger
 	errorLog      *log.Logger
 	templateCache map[string]*template.Template
+	users         models.UserRepository
 }
 
 func main() {
 	addr := flag.String("port", ":8000", "HTTP Network address")
+	dsn := flag.String(
+		"dsn",
+		"macro_user:fit4tu/macro_tracker?parseTime=true",
+		"MySQL dns",
+	)
 
 	flag.Parse()
 
@@ -26,6 +36,11 @@ func main() {
 		log.Ldate|log.Ltime|log.Lshortfile,
 	)
 
+	db, err := openDB(*dsn)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	templateCache, err := newCacheTemplate()
 	if err != nil {
 		errorLog.Fatal(err)
@@ -35,6 +50,7 @@ func main() {
 		infoLog:       infoLog,
 		errorLog:      errorLog,
 		templateCache: templateCache,
+		users:         models.NewUserModel(db),
 	}
 
 	srv := &http.Server{
