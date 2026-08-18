@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -22,12 +23,14 @@ func (app *application) render(w http.ResponseWriter, status int, page string) {
 		return
 	}
 
-	w.WriteHeader(status)
-
-	err := ts.ExecuteTemplate(w, "base", "")
+	buf := new(bytes.Buffer)
+	err := ts.ExecuteTemplate(buf, "base", "")
 	if err != nil {
 		app.serverError(w, err)
 	}
+
+	w.WriteHeader(status)
+	buf.WriteTo(w)
 }
 
 func openDB(dsn string) (*sql.DB, error) {
@@ -37,6 +40,7 @@ func openDB(dsn string) (*sql.DB, error) {
 	}
 
 	if err = db.Ping(); err != nil {
+		db.Close()
 		return nil, err
 	}
 
