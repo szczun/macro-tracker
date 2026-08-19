@@ -3,7 +3,13 @@ package main
 import (
 	"html/template"
 	"path/filepath"
+
+	"github.com/szczun/macro-tracker/internal/models"
 )
+
+type templateData struct {
+	User *models.User
+}
 
 func newCacheTemplate() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
