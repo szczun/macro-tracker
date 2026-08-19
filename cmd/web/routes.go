@@ -10,7 +10,7 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("/{$}", app.home)
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 	mux.HandleFunc("GET /create/user", app.userCreate)
-	//mux.HandleFunc("POST /user/create", app.userCreatePost)
+	mux.HandleFunc("POST /create/user", app.userCreatePost)
 
 	return app.serverRecover(secureHeaders(mux))
 }
