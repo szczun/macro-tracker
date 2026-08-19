@@ -12,5 +12,5 @@ func (app *application) routes() http.Handler {
 	mux.HandleFunc("GET /create/user", app.userCreate)
 	mux.HandleFunc("POST /create/user", app.userCreatePost)
 
-	return app.serverRecover(secureHeaders(mux))
+	return app.serverRecover(app.logRequest(secureHeaders(mux)))
 }
